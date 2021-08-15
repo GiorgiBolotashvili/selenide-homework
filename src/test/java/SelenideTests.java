@@ -15,6 +15,7 @@ public class SelenideTests {
         ElementsCollection boxes = $$("#checkboxes > input");
         System.out.println("The number of elements is " + boxes.size());
         for (WebElement b: boxes) {
+            System.out.println(b.getAttribute("type"));
             Assert.assertTrue(b.isSelected());
         }
     }
@@ -23,7 +24,7 @@ public class SelenideTests {
     public  void dropdown(){
         open("http://the-internet.herokuapp.com/dropdown");
         WebElement dropDown  = $("#dropdown");
-        Select drop =new Select(dropDown);
+        Select drop = new Select(dropDown);
 
         Assert.assertEquals(drop.getFirstSelectedOption().getText(),"Please select an option");
         drop.selectByIndex(2);
