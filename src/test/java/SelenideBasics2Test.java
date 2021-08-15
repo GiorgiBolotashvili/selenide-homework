@@ -1,63 +1,48 @@
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
-import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import static com.codeborne.selenide.CollectionCondition.exactTexts;
+import org.testng.asserts.SoftAssert;
 import static com.codeborne.selenide.Selenide.*;
 
-import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static com.codeborne.selenide.Selenide.*;
-
+import java.util.ArrayList;
 
 public class SelenideBasics2Test {
     @Test
     public void softAssert() throws InterruptedException {
-/*        Logger logger = Logger.getLogger("");
-        logger.setLevel(Level.OFF);
-        */
         open("https://demoqa.com/books ");
+        SoftAssert softAssert = new SoftAssert();
+        ArrayList<WebElement> javaScriptArray = new ArrayList<>();
+//        Find all books with publisher 'O'Reilly Media' containing title 'Javascript'
         ElementsCollection divList = $("div.rt-tbody").findAll("div[class='rt-tr-group']");
         for (WebElement el : divList) {
             WebElement item = $(el.findElement(By.cssSelector("div > div:nth-child(4)")));
             if (item.getAttribute("innerText").equals("O'Reilly Media")) {
                 WebElement result = $(el.findElement(By.cssSelector("div > div:nth-child(2)")));
                 if (result.getText().contains("JavaScript")) {
+                    javaScriptArray.add(result);
                     System.out.println(result.getText());
                 }
             }
         }
-
-        System.out.println(divList.size());
-
-//        $$("div.rt-tr-group").stream().forEach(x -> {System.out.println(x.getText());});
-
-//        System.out.println( $("div.rt-tbody").getText());
-        ElementsCollection list = $("div.rt-tbody").findAll("span#see-book-Speaking JavaScript");
-
-        System.out.println(list.size());
-
-        $("div.rt-tbody").findAll("div > * > span[id*='JavaScript']").stream().forEach(x -> {
-            System.out.println(x.getText());
+//        Check that size of returned list equals to 10
+        softAssert.assertEquals(javaScriptArray.size(),10, "array size is not 10");
+//        Find that each books images are not empty
+        $("div.rt-tbody").findAll("div > div > div > img").stream().forEach(y -> {
+            softAssert.assertFalse(y.getAttribute("src").isEmpty());
         });
 
-        //                    WebElement result = $(el.findElement(By.cssSelector("div > div:nth-child(2) > div > span[id*='JavaScript'] > a")));
-
-//        $("div.rt-tbody").findAll("div").stream().forEach(x -> {System.out.println(x.getText());});
-//
-//                stream().forEach(el -> { el.$$("//div[text()=\"O'Reilly Media\"]"); });
-//        Thread.sleep(90000);
-//       $("#checkboxes > input:nth-child(1)").click();
-  /*       ElementsCollection boxes = $$("#checkboxes > input");
-        System.out.println("The number of elements is " + boxes.size());
-        for (WebElement b: boxes) {
-            Assert.assertTrue(b.isSelected());
-        }*/
+        softAssert.assertAll();
     }
 }
+
+
+
+
+
+/*
+    ElementsCollection bookImages = $("div.rt-tbody").findAll("div > div > div > img");
+            System.out.println(bookImages.size());
+        for (WebElement item : bookImages) {
+                System.out.println(item.getAttribute("src").isEmpty());
+                }*/
