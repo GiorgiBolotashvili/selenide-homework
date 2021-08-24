@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="selenide-homework" />
+        <module name="selenium-homework" />
       </profile>
     </annotationProcessing>
   </component>
